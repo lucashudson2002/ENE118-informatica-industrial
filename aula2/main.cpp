@@ -30,15 +30,15 @@ float equacao2 (float x){
 
 int main()
 {
-    cout << "Usando o método 1:" << endl;
-    cout << "y(3) = " <<equacao1(3) << endl;
-    cout << "y(3!) = " << equacao1(fatorial(3)) << endl;
-    cout << "y(2^3) = " << equacao1(potencia(2,3)) << endl;
+    cout << "Usando o metodo 1:" << endl;
+    cout << "y(25) = " <<equacao1(25) << endl;
+    cout << "y(7!) = " << equacao1(fatorial(7)) << endl;
+    cout << "y(2.5^3) = " << equacao1(potencia(2.5,3)) << endl;
     
-    cout << "Usando o método 2:" << endl;
-    cout << "y(3) = " << equacao2(3) << endl;
-    cout << "y(3!) = " << equacao2(fatorial(3)) << endl;
-    cout << "y(2^3) = " << equacao2(potencia(2,3)) << endl;
+    cout << "Usando o metodo 2:" << endl;
+    cout << "y(25) = " << equacao2(25) << endl;
+    cout << "y(7!) = " << equacao2(fatorial(7)) << endl;
+    cout << "y(2.5^3) = " << equacao2(potencia(2.5,3)) << endl;
     return 0;
 }
 
