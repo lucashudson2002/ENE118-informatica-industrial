@@ -4,9 +4,7 @@
 
 - Este programa deverá contar com uma função com o seguinte protótipo:
 
-<div style="text-align:center;">
-    void inverteNome(char* nome)
-</div>
+void inverteNome(char* nome)
 
 - Dicas:
 
