@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Banco::Banco() //O construtor criara 4 contas
+Banco::Banco()
 {
     this->senhaFuncionario = 246810;
     this->contas[0] = Conta(1234, 1, "Joao", "Corrente", 300);
@@ -17,7 +17,7 @@ Banco::~Banco()
 {
 }
 
-Conta *Banco::buscaConta(int numero)//Retorna o endereço da conta que possuir o mesmo numero informado
+Conta *Banco::buscaConta(int numero)
 {
     for (int i = 0; i < NUMCONTAS; i++)
     {
@@ -30,7 +30,7 @@ Conta *Banco::buscaConta(int numero)//Retorna o endereço da conta que possuir o
     return nullptr;
 }
 
-void Banco::atendimentoCliente() //Realiza o atendimento ao cliente(Função chamada na main)
+void Banco::atendimentoCliente()
 {
     Conta *contaCliente;
     int numC = 0;
@@ -41,9 +41,9 @@ void Banco::atendimentoCliente() //Realiza o atendimento ao cliente(Função cha
     cout << "Digite o numero da sua conta: ";
     cin >> numC;
 
-    contaCliente = this->buscaConta(numC); //Chama o Metodo buscaConta() do banco para achar o objeto conta que possui o numero numC
+    contaCliente = this->buscaConta(numC);
 
-    if (contaCliente == nullptr)//Se não achar nenhuma conta que corresponda entra nesse if
+    if (contaCliente == nullptr)
     {
         cout << "Conta invalida" << endl;
     }
@@ -55,7 +55,7 @@ void Banco::atendimentoCliente() //Realiza o atendimento ao cliente(Função cha
         if (contaCliente->validaSenha(senhain))
         {
             cout << "Ola " << contaCliente->titular << endl;
-            while (atendimento) //Realiza o atendimento
+            while (atendimento)
             {
                 int op;
                 double valor;
