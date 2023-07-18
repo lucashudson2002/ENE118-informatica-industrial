@@ -1,0 +1,35 @@
+#:kivy 1.11.1
+<MyWidget>:
+    orientation: 'vertical'
+    BoxLayout:
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+            TextInput:
+            Button:
+            Button:
+            Button:
+            Button:
+        BoxLayout:
+            orientation: 'vertical'
+            
+            Label: ''
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, 0.1)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (0.1, 1)
+            Label:
+                text: 'IP:'
+            Label:
+                text: 'Port:'
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+            TextInput:
+        Button:
+            id: btn-server
+            text: 'Conectar'
+            font_size: 50
