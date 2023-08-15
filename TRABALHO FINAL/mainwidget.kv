@@ -1,0 +1,148 @@
+#:kivy 1.11.1
+
+<MainWidget>:
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: 0.5, 0.5, 0.5
+        Rectangle:
+            size: self.size
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, 0.1) #tamanho da interface de conexão
+        spacing: 10
+        Label:
+            text: 'SUPERVISÓRIO VENTILAÇÃO'
+            size_hint_x: None
+            width: 300
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: None
+            width: 400
+            Label:
+                text: 'Configurações'
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    text: "MODBUS"
+                    on_release:
+                        root._modbusPopup.open()
+                Button:
+                    text: "Scan Time"
+                    on_release:
+                        root._scanPopup.open()
+        Image:
+            id: img_con
+            size_hint_x: None
+            width: 80
+            source: 'imgs/desconectado.png'
+            pos_hint: {'top': 1, 'right' : 1}
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                size: self.size
+        Image:
+            id: img_inicial
+            source: 'imgs/tela_inicial.png'
+        Label:
+            text: 'Potência Ativa'
+            font_size: 15
+            bold: True
+            halign: 'center'
+            pos_hint: {'x': -0.02, 'y': 0.38}
+            color: 0, 0, 0, 1
+        Label:
+            text: 'Potência Reativa'
+            font_size: 15
+            bold: True
+            halign: 'center'
+            pos_hint: {'x': -0.02, 'y': 0.43}
+            color: 0, 0, 0, 1
+        Label:
+            text: 'Potência Aparente'
+            font_size: 15
+            bold: True
+            halign: 'center'
+            pos_hint: {'x': -0.02, 'y': 0.48}
+            color: 0, 0, 0, 1
+        Button:
+            id: comando_co
+            text: 'Comando'
+            size_hint: (0.15, 0.1)
+            pos_hint: {'x': 0.06, 'y': 0.13}
+            on_release:
+                root._updatePopup()
+                root._coPopup.open()
+        Button:
+            id: comando_motor
+            text: 'Comando'
+            size_hint: (0.15, 0.1)
+            pos_hint: {'x': 0.05, 'y': 0.67}
+            on_release:
+                root._updatePopup()
+                root._motorPopup.open()
+        Button:
+            size_hint: (None, None)
+            size: (0.65*62, 0.65*58)
+            background_normal: 'imgs/graph_icon.jpg'
+            background_down: 'imgs/graph_icon.jpg'
+            pos_hint: {'x': 0.002, 'y': 0.002}
+            on_release: 
+                root._graph.open()
+        Label:
+            id: encoder
+            text: '-.-'
+            font_size: 15
+            bold: True
+            halign: 'center'
+            pos_hint: {'x': -0.25, 'y': 0.29}
+            color: 0, 0, 0, 1
+        TempLabel:
+            id: tit02
+            pos_hint: {'x': -0.061, 'y': -0.05}
+        TempLabel:
+            id: tit01
+            pos_hint: {'x': -0.290, 'y': 0.0}
+        TempLabel:
+            id: pit02
+            pos_hint: {'x': -0.095, 'y': 0.009}
+        TempLabel:
+            id: pit01
+            pos_hint: {'x': -0.225, 'y': 0.12}
+        TempLabel:
+            id: pit03
+            pos_hint: {'x': -0.115, 'y': 0.3}
+        TempLabel:
+            id: temperatura
+            pos_hint: {'x': 0.3, 'y': 0.38}
+        TempLabel:
+            id: velocidade
+            pos_hint: {'x': 0.3, 'y': 0.43}
+        TempLabel:
+            id: vazao
+            pos_hint: {'x': 0.3, 'y': 0.48}
+        TempLabel:
+            id: ativa_total
+            pos_hint: {'x': 0.10, 'y': 0.38}
+        TempLabel:
+            id: reativa_total
+            pos_hint: {'x': 0.10, 'y': 0.43}
+        TempLabel:
+            id: aparente_total
+            pos_hint: {'x': 0.10, 'y': 0.48}
+        Button:
+            text: "Dados Históricos"
+            pos_hint: {'right':1, 'down':1}
+            size_hint: {0.2, 0.05}
+            on_release:
+                root._hgraph.open()
+
+
+<TempLabel@Label>:
+    text: '-.-'
+    font_size: 15
+    bold: True
+    halign: 'center'
+    color: 0, 0, 0, 1

@@ -1,0 +1,495 @@
+#:kivy 1.11.1
+<ModbusPopup>:
+    title: "Configurações MODBUS"
+    size_hint_y: None
+    size_hint_x: 0.4
+    height: 200
+    BoxLayout:
+        id: layout
+        orientation: 'vertical'
+        GridLayout:
+            cols: 2
+            rows: 2
+            Label:
+                text: "IP"
+                font_size: 14
+            TextInput:
+                id: txt_ip
+                text: "127.0.0.1"
+                font_size: 14
+                halign: 'center'
+                valign: 'middle'
+            Label:
+                text: "Porta"
+                font_size: 14
+            TextInput:
+                id: txt_porta
+                text: "502"
+                font_size: 14
+                halign: 'center'
+                valign: 'middle'
+        BoxLayout:
+            oritentation:'horizontal'
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Conectar"
+                on_release:
+                    root.clearInfo()
+                    app.root.startDataRead(txt_ip.text, int(txt_porta.text))
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Fechar"
+                on_release:
+                    root.dismiss()
+                    root.clearInfo()
+
+<ScanPopup>:
+    title: "Configurações ScanTime"
+    size_hint_y: None
+    size_hint_x: 0.4
+    height: 150
+    BoxLayout:
+        id: layout
+        orientation: 'vertical'
+        GridLayout:
+            cols: 2
+            rows: 1
+            Label:
+                text: "ScanTime [ms]"
+                font_size: 14
+            TextInput:
+                id: txt_st
+                font_size: 14
+                halign: 'center'
+                valign: 'middle'
+        BoxLayout:
+            oritentation:'horizontal'
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Configurar"
+                on_release:
+                    app.root._scan_time = int(txt_st.text)
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Fechar"
+                on_release:
+                    root.dismiss()
+
+<MotorPopup>:
+    title: "Comando Motor"
+    size_hint_y: 0.9
+    size_hint_x: 0.9
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            BoxLayout:
+                orientation: 'vertical' 
+                Label:
+                    text: "COMANDO DO VENTILADOR"
+                    font_size: 16
+                Button:
+                    text: 'Liga'
+                    on_release:
+                        root.sel_ventilador_btn(self, 'Liga')
+                Button:
+                    text: 'Desliga'
+                    on_release:
+                        root.sel_ventilador_btn(self, 'Desliga')
+                Button:
+                    text: 'Reset'
+                    on_release:
+                        root.sel_ventilador_btn(self, 'Reset')
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "SELECIONA TIPO DE PARTIDA"
+                    font_size: 16
+                Button:
+                    text: 'Tesys Direta'
+                    on_release:
+                        root.sel_partida(self, 'Tesys')
+                Button:
+                    text: 'ATV31 Inversor'
+                    on_release:
+                        root.sel_partida(self, 'ATV31')
+                Button:
+                    text: 'ATS48 Soft-Start'
+                    on_release:
+                        root.sel_partida(self, 'ATS48')
+            GridLayout:
+                cols: 2
+                rows: 4
+                BoxLayout:
+                Label:
+                    id: txt_motor
+                    text: "-.-"
+                    font_size: 14
+                Label:
+                    text: "ACC [s]"
+                    font_size: 14
+                TextInput:
+                    id: txt_acc
+                    text: "0"
+                    font_size: 14
+                    halign: 'center'
+                    valign: 'middle'
+                    input_filter: 'int'
+                    on_text:
+                        root.set_accel(self, self.text)
+                Label:
+                    text: "DCC [s]"
+                    font_size: 14
+                TextInput:
+                    id: txt_dcc
+                    text: "0"
+                    font_size: 14
+                    halign: 'center'
+                    valign: 'middle'
+                    input_filter: 'int'
+                    on_text:
+                        root.set_desaccel(self, self.text)
+                Label:
+                    text: "Freq [Hz]"
+                    font_size: 14
+                TextInput:
+                    id: txt_freq
+                    text: "60"
+                    font_size: 14
+                    halign: 'center'
+                    valign: 'middle'
+                    input_filter: 'int'
+                    on_text: root.on_input_freq(self, self.text)
+            Slider:
+                id: slider_freq
+                orientation: 'vertical'
+                min: 0
+                max: 60
+                value: 60
+                on_value: root.on_slider_freq(self, self.value)
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                id: text_sel_ventilador
+                text: 'SELEÇÃO DO VENTILADOR'
+            BoxLayout:
+                orientation: 'horizontal'
+                BoxLayout:
+                    CheckBox:
+                        id: sel_axial
+                        group: 'sel_ventilador'
+                        on_active:
+                            root.sel_ventilador_checkbox(self, 'axial')
+                    Label:
+                        text: 'AXIAL'
+                BoxLayout:
+                    CheckBox:
+                        id: sel_radial
+                        group: 'sel_ventilador'
+                        on_active:
+                            root.sel_ventilador_checkbox(self, 'radial')
+                    Label:
+                        text: 'RADIAL'
+                Spinner:
+                    id: sel_opcao
+                    size_hint_y: 0.5
+                    size_hint_x: 0.8
+                    text: '-.-'
+                    values: ['Encoder', 'Torque Axial', 'Torque Radial']
+                    on_text:
+                        root.on_list_change(self, self.text)
+                Label:
+                    id: text_acc_dcc
+                    text: 'ACELERAÇÃO E\n DESACELERAÇÃO'
+            Label:
+                id: text_sel_motor
+                text: 'SELEÇÃO DO MOTOR'
+            BoxLayout:
+                BoxLayout:
+                    orientation: 'horizontal'
+                    CheckBox:
+                        id: sel_rendimento
+                        group: 'sel_motor'
+                        on_active:
+                            root.sel_motor_checkbox(self, 'rendimento')
+                    Label:
+                        text: 'ALTO RENDIMENTO'
+                BoxLayout:
+                    CheckBox:
+                        id: sel_convencional
+                        group: 'sel_motor'
+                        on_active:
+                            root.sel_motor_checkbox(self, 'convencional')
+                    Label:
+                        text: 'CONVENCIONAL'
+                Label:
+                    id: text_acc_dcc_info
+                    text: 'MÍNIMO: 10 s\nMÁXIMO: 60 s'
+            BoxLayout:
+                orientation: 'horizontal'
+        Button:
+            size_hint_y: None
+            height: 40
+            text: "Fechar"
+            on_release:
+                root.dismiss()
+
+<CoPopup>:
+    title: "Comando Compressor"
+    size_hint_y: 0.9
+    size_hint_x: 0.9
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        id: lb_compressor
+                        text: 'TIPO COMPRESSOR'
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        CheckBox:
+                            id: sel_scroll
+                            group: 'sel_compressor'
+                            on_active:
+                                root.sel_compressor_checkbox(self, 'scroll')
+                        Label:
+                            text: 'SCROLL'
+                    BoxLayout:
+                        CheckBox:
+                            id: sel_hermetico
+                            group: 'sel_compressor'
+                            on_active:
+                                root.sel_compressor_checkbox(self, 'hermetico')
+                        Label:
+                            text: 'HERMÉTICO'
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        id: lb_refrigeracao
+                        text: 'COMANDO DA\nREFRIGERAÇÃO'
+                    Button:
+                        text: 'LIGA'
+                        on_release:
+                            root.btn_compressor(self, 'Liga')
+                    Button:
+                        text: 'DESLIGA'
+                        on_release:
+                            root.btn_compressor(self, 'Desliga')
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    id: lb_umidificador
+                    text: 'UMIDIFICADOR'
+                Button:
+                    text: 'LIGA'
+                    on_release:
+                        root.btn_umidificador(self, 'Liga')
+                Button:
+                    text: 'DESLIGA'
+                    on_release:
+                        root.btn_umidificador(self, 'Desliga')
+                Label:
+                    id: lb_termostato
+                    text: 'TERMOSTATO'
+                TextInput:
+                    id: txt_termostato
+                    text: '-.-'
+                    on_text:
+                        root.set_termostato(self, self.text)
+                Label:
+                    id: lb_termostato_min
+                    text: 'VALOR MIN. 18ºC'
+                Label:
+                    id: lb_termostato_max
+                    text: 'VALOR MAX. 30ºC'
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    id: lb_aquecedor1
+                    text: 'AQUECEDOR-01'
+                Button:
+                    text: 'LIGA'
+                    on_release:
+                        root.btn_aquecedor1(self, 'Liga')
+                Button:
+                    text: 'DESLIGA'
+                    on_release:
+                        root.btn_aquecedor1(self, 'Desliga')
+                Label:
+                    id: lb_aquecedor2
+                    text: 'AQUECEDOR-02'
+                Button:
+                    text: 'LIGA'
+                    on_release:
+                        root.btn_aquecedor2(self, 'Liga')
+                Button:
+                    text: 'DESLIGA'
+                    on_release:
+                        root.btn_aquecedor2(self, 'Desliga')
+            Slider:
+                id: slider_freq
+                orientation: 'vertical'
+                min: 0
+                max: 60
+                value: 60
+                on_value:
+                    root.on_slider_freq(self, self.value)
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    id: lb_man_sel
+                    text: 'MAN\nSEL.'
+                Button:
+                    text: 'AUTO'
+                    on_release:
+                        root.btn_auto_man(self, 'Auto')
+                Button:
+                    text: 'MAN.'
+                    on_release:
+                        root.btn_auto_man(self, 'Man')
+                Label:
+                    id: lb_freq
+                    text: '-.- Hz'
+        Button:
+            size_hint_y: None
+            height: 40
+            text: "Fechar"
+            on_release:
+                root.dismiss()
+
+<DataGraphPopup>:
+    title: "Gráfico das Variáveis Monitoradas"
+    BoxLayout:
+        orientation:'vertical'
+        TimeSeriesGraph:
+            id: graph
+            xlabel: 'Horário'
+            ylabel: 'Magnitude'
+            background_color: 0.5,0.5,0.5,0.5
+            x_ticks_minor: 1
+            x_ticks_major: 10
+            y_ticks_minor: 1
+            y_ticks_major: 10
+            x_grid_label: True
+            y_grid_label: True
+            padding: 5
+            x_grid: True
+            y_grid: True
+            xmin: 0
+            ymin: 0
+            ymax: 500
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint:(1,0.1)
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: (0.8,1)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: (1,0.5)
+                    Label:
+                        size_hint:(0.3,1)
+                        text: 'Número de pontos no gráfico'
+                    LabelCheckBoxDataGraph:
+                        id: mp20
+                        on_kv_post:
+                            self.ids.label.text = '20'
+                            self.ids.checkbox.group = 'cb_group'
+                            self.ids.checkbox.active = True
+                    LabelCheckBoxDataGraph:
+                        id: mp50
+                        on_kv_post:
+                            self.ids.label.text = '50'
+                            self.ids.checkbox.group = 'cb_group'
+                    LabelCheckBoxDataGraph:
+                        id: mp100
+                        on_kv_post:
+                            self.ids.label.text = '100'
+                            self.ids.checkbox.group = 'cb_group'
+            Button:
+                text: "Fechar"
+                size_hint:(0.2,1)
+                on_release: root.dismiss()
+
+<LabelCheckBoxDataGraph>:
+    orientation: 'horizontal'
+    size_hint: (0.1,1)
+    CheckBox:
+        id: checkbox
+        on_active: app.root._graph.ids.graph.setMaxPoints(int(label.text),0) if app.root is not None else None
+    Label:
+        id: label   
+
+<HistGraphPopup>:
+    title: "Histórico das Variáveis Monitoradas"
+    BoxLayout:
+        orientation:'vertical'
+        TimeSeriesGraph:
+            id: graph
+            xlabel: 'Horário'
+            ylabel: 'Magnitude'
+            background_color: 0.5,0.5,0.5,0.5
+            x_ticks_minor: 1
+            x_ticks_major: 10
+            y_ticks_minor: 1
+            y_ticks_major: 10
+            x_grid_label: True
+            y_grid_label: True
+            padding: 5
+            x_grid: True
+            y_grid: True
+            xmin: 0
+            ymin: 0
+            ymax: 500
+
+        BoxLayout:
+            id:variaveis
+            orientation:'horizontal'
+            size_hint: (1, 0.1)
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint:(1, 0.1)
+            Label:
+                text: 'Timestamp inicial \r\n [size=12] (DD/MM/AAAA HH:MM:SS) [/size]'
+                halign:'center'
+                markup: True
+            TextInput:
+                id: txt_init_time
+                size_hint: (1, 0.8)
+                halign: 'center'
+                valign: 'middle'
+                multiline: False
+            Label:
+                text: 'Timestamp final \r\n [size=12] (DD/MM/AAAA HH:MM:SS) [/size]'
+                halign:'center'
+                markup: True
+            TextInput:
+                id: txt_final_time
+                size_hint: (1, 0.8)
+                halign: 'center'
+                valign: 'middle'
+                multiline: False
+            Button:
+                text: "Fechar"
+                size_hint:(1,0.8)
+                on_release: root.dismiss()
+
+<LabelCheckBoxHistGraph>:
+    orientation: 'horizontal'
+    size_hint: (0.05,1)
+    CheckBox:
+        id: checkbox
+        on_active: app.root.getDataDB()
+    Label:
+        id: label   
+        font_size: 12
+        bold: True
